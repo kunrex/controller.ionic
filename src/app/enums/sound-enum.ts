@@ -1,5 +1,6 @@
 export enum SoundEnum
 {
   Error = 'error',
-  Alert = 'alert'
+  Alert = 'alert',
+  Click = 'click'
 }

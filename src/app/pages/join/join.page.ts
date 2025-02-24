@@ -31,7 +31,7 @@ export class JoinPage implements OnInit, OnDestroy {
   }
 
   public playClick() : void {
-    this.sounds.playSound(SoundEnum.Alert).then();
+    this.sounds.playSound(SoundEnum.Click).then();
   }
 
   public ngOnDestroy() : void {

@@ -8,11 +8,11 @@
       <ion-card-content>
         <ion-item>
           <ion-label position="floating">Username</ion-label>
-          <ion-input (click)="playClick()" [(ngModel)]="username" type="text"></ion-input>
+          <ion-input [(ngModel)]="username" type="text"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Room Code</ion-label>
-          <ion-input (click)="playClick()" [(ngModel)]="roomCode" maxlength="8" counter="true" type="text"></ion-input>
+          <ion-input [(ngModel)]="roomCode" maxlength="8" counter="true" type="text"></ion-input>
         </ion-item>
         <ion-button [disabled]="IsDisabled()" (click)="joinRoom()" expand="block" class="join-button">
           <ion-icon name="game-controller-outline" slot="start"></ion-icon>

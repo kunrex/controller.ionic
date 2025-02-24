@@ -1,6 +1,11 @@
-import {Component, type ElementRef, NgZone, type OnInit, ViewChild} from "@angular/core"
+import { Component, type ElementRef, NgZone, type OnInit, ViewChild } from "@angular/core"
 import { GestureController } from "@ionic/angular"
-import {SocketService} from "../../services/requests/socket-service";
+
+import { SoundEnum } from "../../enums/sound-enum";
+
+import { SoundService } from "../../services/sounds/sound-service";
+import { WidgetService } from "../../services/widgets/widget-service";
+import { SocketService } from "../../services/requests/socket-service";
 
 @Component({
   standalone: false,
@@ -20,7 +25,7 @@ export class ControllerPage implements OnInit {
   rightStickPosition = { x: 0, y: 0 }
   activeStick: "left" | "right" | null = null
 
-  constructor(private readonly gestureCtrl: GestureController, private readonly ngZone: NgZone, private readonly socket: SocketService) { }
+  constructor(private readonly gestureCtrl: GestureController, private readonly ngZone: NgZone, private readonly socket: SocketService, private readonly sounds: SoundService, private readonly widgets: WidgetService) { }
 
   public ngOnInit() : void {
     this.initializeJoystickGestures(this.leftStickRef);
@@ -83,6 +88,14 @@ export class ControllerPage implements OnInit {
   public onDirectionButton(button: number) : void {
     this.directionState ^= (1 << button);
     this.socket.trySendImmediate(this.getControllerData());
+  }
+
+  public More() : void {
+    this.sounds.playSound(SoundEnum.Click).then(async () => {
+      let result = await this.widgets.presentLeaveChoice();
+      if(result)
+        this.socket.disconnect();
+    });
   }
 
   private getControllerData() : Uint8Array {

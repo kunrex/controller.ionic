@@ -1,5 +1,7 @@
 {
   "name": "controller",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }

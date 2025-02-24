@@ -1,12 +1,7 @@
 import { Injectable } from "@angular/core";
 
-import { Service} from "../service";
+import { Service } from "../service";
 import { decode, getWS, latency } from "./services";
-
-import { SoundEnum } from "../../enums/sound-enum";
-
-import { SoundService } from "../sounds/sound-service";
-import { WidgetService } from "../widgets/widget-service";
 
 class NetworkQueue {
   private queue: Uint8Array[] = [];
@@ -20,11 +15,13 @@ class NetworkQueue {
   }
 
   public enqueueImmediate(data: Uint8Array) : void {
-    this.queue.splice(0, 0, data)
+    this.queue.splice(0, this.queue.length);
+    this.enqueue(data);
   }
 
   private async processQueue() : Promise<void> {
-    if (this.sending) return;
+    if (this.sending)
+      return;
 
     this.sending = true;
 
@@ -47,13 +44,13 @@ export class SocketService extends Service {
 
   private queue: NetworkQueue = new NetworkQueue(this.send);
 
-  constructor(private readonly widget: WidgetService, private readonly sounds: SoundService) {
+  constructor() {
     super();
 
     this.initialise();
   }
 
-  public tryConnect(code: string, onOpen : any | null) : void {
+  public tryConnect(code: string, onOpen : () => any | null, onClose : (event: CloseEvent) => any | null, onError : () => any | null, onMessage : (event: MessageEvent) => any | null) : void {
     if (this.IsConnected())
       return;
 
@@ -63,16 +60,16 @@ export class SocketService extends Service {
       this.socket = new WebSocket(ws);
 
       this.socket.onopen = onOpen;
+      this.socket.onclose = onClose;
 
-      this.socket.onclose = () => { this.onConnectionClose(); };
-      this.socket.onerror = (e) => { this.onConnectionError(e) };
-      this.socket.onmessage = (e) => { this.onConnectionMessage(e); };
+      this.socket.onerror = onError;
+      this.socket.onmessage = onMessage;
     }
     catch (e) {
       if(typeof e === "string")
-        this.onConnectionError("Failed to connect to local room:" + e);
+        onClose(new CloseEvent("Failed to connect to local room:"));
       else if(e instanceof Error)
-        this.onConnectionError("Failed to connect to local room:" + e.message);
+        onClose(new CloseEvent("Failed to connect to local room:" + e.message));
     }
   }
 
@@ -100,17 +97,5 @@ export class SocketService extends Service {
 
   private send(data: Uint8Array) : void {
     this.socket?.send(data);
-  }
-
-  private onConnectionClose() : void {
-    console.log('Connection closed');
-  }
-
-  private onConnectionError(error : any) : void {
-    this.sounds.playSound(SoundEnum.Error).then(() => this.widget.presentMessage("Something went wrong...", error));
-  }
-
-  private onConnectionMessage(message: any) : void {
-    this.sounds.playSound(SoundEnum.Alert).then(() => this.widget.presentMessage("Hold up...", message));
   }
 }

@@ -21,4 +21,26 @@ export class WidgetService extends Service
 
     await alert.present();
   }
+
+  public async presentLeaveChoice() : Promise<boolean> {
+    let leave: boolean = false;
+    const alert = await this.alertController.create({
+      header: "More",
+      message: "Press Leave to leave the room",
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Leave',
+          role: 'destructive',
+          handler: () => { leave = true; }
+        },
+      ],
+    });
+
+    await alert.present();
+    return leave;
+  }
 }

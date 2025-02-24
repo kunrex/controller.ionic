@@ -3,9 +3,11 @@ import {Injectable, NgZone} from "@angular/core";
 import {Preferences} from '@capacitor/preferences';
 
 import {PageEnum} from "../enums/page-enum";
+import {SoundEnum} from "../enums/sound-enum";
 
 import {Service} from "./service";
 import {SoundService} from "./sounds/sound-service"
+import {WidgetService} from "./widgets/widget-service";
 import {SocketService} from "./requests/socket-service";
 
 const name: string = "name";
@@ -17,7 +19,7 @@ export class AppFlowService extends Service {
   userName: string = "";
   public Username() : string { return this.userName; }
 
-  constructor(private readonly ngZone: NgZone, private readonly router: Router, private readonly sounds: SoundService, private readonly socket: SocketService) {
+  constructor(private readonly ngZone: NgZone, private readonly router: Router, private readonly socket: SocketService, private readonly sounds: SoundService, private readonly widgets: WidgetService) {
     super();
   }
 
@@ -40,8 +42,15 @@ export class AppFlowService extends Service {
       return;
 
     this.socket.tryConnect(code, () => {
-      this.navigate(PageEnum.Controller);
-    });
+        this.navigate(PageEnum.Controller);
+      }, (e) => {
+        this.sounds.playSound(SoundEnum.Alert).then(() => this.widgets.presentMessage("Connection Closed.", e.code == 200 ? "" : e.reason));
+        this.navigate(PageEnum.Join);
+      }, () => {
+        this.sounds.playSound(SoundEnum.Error).then(() => this.widgets.presentMessage("Something went wrong...", "That shouldn't have happened"));
+      }, (e) => {
+        this.sounds.playSound(SoundEnum.Alert).then(() => this.widgets.presentMessage("Server sent a message!", e.data));
+      });
   }
 
   public async leaveRoom() : Promise<void> {
