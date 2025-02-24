@@ -1,0 +1,41 @@
+<ion-content class="ion-padding">
+  <div class="game-controller">
+    <div class="joysticks">
+      <div #leftStick class="joystick" (touchstart)="handleStickSelect('left')" (touchend)="handleStickRelease('left')">
+        <div class="joystick-handle" [style.left.%]="(leftStickPosition.x * 20) + 50" [style.top.%]="(leftStickPosition.y * 20) + 50"></div>
+      </div>
+      <div #rightStick class="joystick" (touchstart)="handleStickSelect('right')" (touchend)="handleStickRelease('right')">
+        <div class="joystick-handle" [style.left.%]="(rightStickPosition.x * 20) + 50" [style.top.%]="(rightStickPosition.y * 20) + 50"></div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="d-pad">
+        <ion-button (touchstart)="onDirectionButton(3)" (touchend)="onDirectionButton(3)">
+          <ion-icon slot="icon-only" name="caret-up"></ion-icon>
+        </ion-button>
+        <ion-button (touchstart)="onDirectionButton(2)" (touchend)="onDirectionButton(2)">
+          <ion-icon slot="icon-only" name="caret-back"></ion-icon>
+        </ion-button>
+        <div></div>
+        <ion-button (touchstart)="onDirectionButton(1)" (touchend)="onDirectionButton(1)">
+          <ion-icon slot="icon-only" name="caret-forward"></ion-icon>
+        </ion-button>
+        <ion-button (touchstart)="onDirectionButton(0)" (touchend)="onDirectionButton(0)">
+          <ion-icon slot="icon-only" name="caret-down"></ion-icon>
+        </ion-button>
+      </div>
+      <div class="action-buttons">
+        <ion-button shape="round" color="success" (touchstart)="onLetterButton(3)" (touchend)="onLetterButton(3)">A</ion-button>
+        <ion-button shape="round" color="danger" (touchstart)="onLetterButton(2)" (touchend)="onLetterButton(2)">B</ion-button>
+        <ion-button shape="round" color="primary"  (touchstart)="onLetterButton(1)" (touchend)="onLetterButton(1)">X</ion-button>
+        <ion-button shape="round" color="warning" (touchstart)="onLetterButton(0)" (touchend)="onLetterButton(0)">Y</ion-button>
+      </div>
+    </div>
+    <div class="menu-buttons">
+      <ion-button size="medium" fill="outline" color="secondary">
+        More
+        <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

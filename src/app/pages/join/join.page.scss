@@ -1,0 +1,46 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+ion-card {
+  max-width: 450px;
+  width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+ion-card-header {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+ion-card-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+ion-item {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.join-button {
+  margin-top: 1.5rem;
+  --border-radius: 8px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
